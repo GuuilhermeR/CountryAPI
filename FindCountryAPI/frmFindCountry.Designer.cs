@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.dtgDados = new System.Windows.Forms.DataGridView();
-            this.txtFilterCountry = new System.Windows.Forms.TextBox();
             this.btnConsultar = new System.Windows.Forms.Button();
             this.btnLimpar = new System.Windows.Forms.Button();
+            this.cbxCountry = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtgDados)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,14 +46,7 @@
             this.dtgDados.Name = "dtgDados";
             this.dtgDados.Size = new System.Drawing.Size(540, 293);
             this.dtgDados.TabIndex = 0;
-            this.dtgDados.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dtgDados_CellMouseClick);
-            // 
-            // txtFilterCountry
-            // 
-            this.txtFilterCountry.Location = new System.Drawing.Point(12, 12);
-            this.txtFilterCountry.Name = "txtFilterCountry";
-            this.txtFilterCountry.Size = new System.Drawing.Size(100, 20);
-            this.txtFilterCountry.TabIndex = 1;
+            this.dtgDados.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgDados_CellDoubleClick);
             // 
             // btnConsultar
             // 
@@ -75,30 +68,37 @@
             this.btnLimpar.UseVisualStyleBackColor = true;
             this.btnLimpar.Click += new System.EventHandler(this.btnLimpar_Click);
             // 
-            // Form1
+            // cbxCountry
+            // 
+            this.cbxCountry.FormattingEnabled = true;
+            this.cbxCountry.Location = new System.Drawing.Point(12, 12);
+            this.cbxCountry.Name = "cbxCountry";
+            this.cbxCountry.Size = new System.Drawing.Size(162, 21);
+            this.cbxCountry.TabIndex = 4;
+            // 
+            // frmFindCountry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 404);
+            this.Controls.Add(this.cbxCountry);
             this.Controls.Add(this.btnLimpar);
             this.Controls.Add(this.btnConsultar);
-            this.Controls.Add(this.txtFilterCountry);
             this.Controls.Add(this.dtgDados);
-            this.Name = "Form1";
+            this.Name = "frmFindCountry";
             this.Text = "Países";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgDados)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView dtgDados;
-        private System.Windows.Forms.TextBox txtFilterCountry;
         private System.Windows.Forms.Button btnConsultar;
         private System.Windows.Forms.Button btnLimpar;
+        private System.Windows.Forms.ComboBox cbxCountry;
     }
 }
 

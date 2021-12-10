@@ -50,7 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Country.cs" />
-    <Compile Include="CountryDetails.cs" />
+    <Compile Include="frmCountryDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCountryDetails.Designer.cs">
+      <DependentUpon>frmCountryDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFindCountry.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +64,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmCountryDetails.resx">
+      <DependentUpon>frmCountryDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFindCountry.resx">
       <DependentUpon>frmFindCountry.cs</DependentUpon>
     </EmbeddedResource>

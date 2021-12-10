@@ -1,20 +1,36 @@
 ﻿using Newtonsoft.Json;
 using QuickType;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FindCountryAPI
 {
     public partial class frmFindCountry : Form
     {
+        HttpClient api = new HttpClient { BaseAddress = new Uri("https://restcountries.com") };
+        List<Country> countryInfo = new List<Country>();
+
+
         public frmFindCountry()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
+
+            if (countryInfo.Count > 0)
+            {
+
+            }
+
+            var response = await api.GetAsync("/v3.1/all");
+            var content = await response.Content.ReadAsStringAsync();
+
+            var countries = JsonConvert.DeserializeObject(content);
 
         }
 
@@ -30,45 +46,70 @@ namespace FindCountryAPI
             }
         }
 
+        private void btnConsultar_Click(object sender, EventArgs e)
+        {
+            FindCountrys(cbxCountry.Text);
+        }
+
         private async void FindCountrys(string countryName)
         {
-            HttpClient teste = new HttpClient { BaseAddress = new Uri("https://restcountries.com") };
-            var response = await teste.GetAsync($@"v2/name/{countryName}?fullText=true");
+            Country country1 = new Country();
+
+            var response = await api.GetAsync($@"v2/name/{countryName}?fullText=true");
             var content = await response.Content.ReadAsStringAsync();
             if (content.Contains("404"))
-                MessageBox.Show("Não foi possível encontrar");
+                MessageBox.Show("Não foi possível encontrar esse país!");
 
             var countries = JsonConvert.DeserializeObject<Country[]>(content);
 
             CriarColunasPaises();
+
             foreach (var country in countries)
             {
-                dtgDados.Rows.Add(country.Name, country.Alpha2Code, country.Currencies[0].Code, country.RegionalBlocs[0].Name, country.Flag);
+                country1.Name = country.Name;
+                country1.Alpha2Code = country.Alpha2Code;
+                country1.Currencies = country.Currencies;
+                country1.Flags = country.Flags;
+                country1.RegionalBlocs = country.RegionalBlocs;
+                country1.Population = country.Population;
+                country1.Timezones = country.Timezones;
+                country1.Capital = country.Capital;
+                country1.Borders = country.Borders;
+                country1.Languages = country.Languages;
             }
-        }
+            countryInfo.Add(country1);
 
-        private void btnConsultar_Click(object sender, EventArgs e)
-        {
-            FindCountrys(txtFilterCountry.Text);
+            foreach(var country in countryInfo)
+            {
+                dtgDados.Rows.Add(country.Name,country.Alpha2Code,country.Currencies[0].Name,country.Flags.Png,country.RegionalBlocs[0].Name);
+            }
+            dtgDados.AutoResizeColumns();
         }
 
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             dtgDados.Rows.Clear();
             dtgDados.Columns.Clear();
-            txtFilterCountry.Text = string.Empty;
+            cbxCountry.Text = string.Empty;
         }
 
-        private void dtgDados_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dtgDados_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 && e.ColumnIndex < 0)
                 return;
 
             if (dtgDados.Columns[e.ColumnIndex].Index == dtgDados.Columns["nomePais"].Index)
-            {
-
+            {                                
+                LoadDetailsCountry();
             }
+        }
 
+        private void LoadDetailsCountry()
+        {
+            using (frmCountryDetails frmCountryDetails = new frmCountryDetails(countryInfo))
+            {
+                frmCountryDetails.ShowDialog();
+            }
         }
     }
 }
