@@ -3,7 +3,6 @@ using QuickType;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FindCountryAPI
@@ -20,35 +19,27 @@ namespace FindCountryAPI
         }
 
         private async void Form1_Load(object sender, EventArgs e)
-        {
+        {        
+            //var response = await api.GetAsync("/v3.1/all");
+            //var content = await response.Content.ReadAsStringAsync();
 
-            if (countryInfo.Count > 0)
-            {
-
-            }
-
-            var response = await api.GetAsync("/v3.1/all");
-            var content = await response.Content.ReadAsStringAsync();
-
-            var countries = JsonConvert.DeserializeObject(content);
-
+            //var countries = JsonConvert.DeserializeObject(content);
         }
 
         private void CriarColunasPaises()
         {
             if (dtgDados.Columns.Count == 0)
-            {
                 dtgDados.Columns.Add("nomePais", "País");
                 dtgDados.Columns.Add("sigla", "Sigla");
                 dtgDados.Columns.Add("moeda", "Moeda");
                 dtgDados.Columns.Add("bloco", "Bloco Econômica");
                 dtgDados.Columns.Add("bandeira", "Bandeira");
-            }
+
         }
 
         private void btnConsultar_Click(object sender, EventArgs e)
         {
-            FindCountrys(cbxCountry.Text);
+            FindCountrys(txtCountry.Text);
         }
 
         private async void FindCountrys(string countryName)
@@ -58,7 +49,10 @@ namespace FindCountryAPI
             var response = await api.GetAsync($@"v2/name/{countryName}?fullText=true");
             var content = await response.Content.ReadAsStringAsync();
             if (content.Contains("404"))
+            {
                 MessageBox.Show("Não foi possível encontrar esse país!");
+                return;
+            }
 
             var countries = JsonConvert.DeserializeObject<Country[]>(content);
 
@@ -81,7 +75,7 @@ namespace FindCountryAPI
 
             foreach(var country in countryInfo)
             {
-                dtgDados.Rows.Add(country.Name,country.Alpha2Code,country.Currencies[0].Name,country.Flags.Png,country.RegionalBlocs[0].Name);
+                dtgDados.Rows.Add(country.Name,country.Alpha2Code,country.Currencies[0].Name,country.RegionalBlocs[0].Name, country.Flags.Png);
             }
             dtgDados.AutoResizeColumns();
         }
@@ -90,7 +84,7 @@ namespace FindCountryAPI
         {
             dtgDados.Rows.Clear();
             dtgDados.Columns.Clear();
-            cbxCountry.Text = string.Empty;
+            txtCountry.Text = string.Empty;
         }
 
         private void dtgDados_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
